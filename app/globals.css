@@ -2,153 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Light theme (default). Dark tokens apply when the OS prefers dark mode. */
 :root {
   color-scheme: light;
-
-  /* --- Agora light token set --- */
-
-  /* Backgrounds */
-  --background:       220 20% 98%;
-  --surface:          220 18% 96%;
-  --surface-elevated: 220 16% 94%;
-
-  /* Semantic surface aliases */
-  --card:             0 0% 100%;
-  --card-foreground:  220 25% 12%;
-  --popover:          0 0% 100%;
-  --popover-foreground: 220 25% 12%;
-  --muted:            220 14% 94%;
-
-  /* Borders / inputs */
-  --border:           220 13% 88%;
-  --input:            220 13% 88%;
-
-  /* Foreground */
-  --foreground:       220 25% 12%;
-  --muted-foreground: 220 10% 42%;
-
-  /* Brand — Agora cyan */
-  --primary:            194 100% 42%;
-  --primary-foreground: 220 25% 12%;
-
-  /* Secondary — quiet surface-level control */
-  --secondary:            220 14% 94%;
-  --secondary-foreground: 220 25% 12%;
-
-  /* Accent — same hue as primary */
-  --accent:            194 100% 42%;
-  --accent-foreground: 220 25% 12%;
-
-  /* Destructive — end call, error states only */
-  --destructive:            0 72% 52%;
+  --background: 44 100% 97%;
+  --foreground: 219 39% 16%;
+  --card: 0 0% 100%;
+  --card-foreground: 219 39% 16%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 219 39% 16%;
+  --primary: 28 98% 58%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 164 44% 89%;
+  --secondary-foreground: 160 42% 21%;
+  --muted: 198 45% 93%;
+  --muted-foreground: 216 18% 42%;
+  --accent: 187 66% 66%;
+  --accent-foreground: 219 39% 16%;
+  --destructive: 0 78% 59%;
   --destructive-foreground: 0 0% 100%;
-
-  /* Focus ring */
-  --ring: 194 100% 42%;
-
-  /* Radius base (8px) */
-  --radius: 0.5rem;
-
-  /* Charts */
-  --chart-1: 194 100% 42%;
-  --chart-2: 220 10% 45%;
-  --chart-3: 220 10% 35%;
-  --chart-4: 0 72% 52%;
-  --chart-5: 150 50% 40%;
-
-  /* Sidebar */
-  --sidebar-background:         0 0% 100%;
-  --sidebar-foreground:         220 25% 12%;
-  --sidebar-primary:            194 100% 42%;
-  --sidebar-primary-foreground: 220 25% 12%;
-  --sidebar-accent:             220 14% 94%;
-  --sidebar-accent-foreground:  220 25% 12%;
-  --sidebar-border:             220 13% 88%;
-  --sidebar-ring:               194 100% 42%;
-
-  /*
-   * AgentVisualizer: same order as dark — cool/primary at bar bottom, soft mid, purple at top.
-   * Light: blue ≈ cyan role; dark: overridden below (cyan → soft → purple).
-   */
-  --viz-stop-1: 225 92% 50%;
-  --viz-stop-2: 220 14% 78%;
-  --viz-stop-3: 285 58% 48%;
-
-  /* Font */
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --border: 0 0% 100%;
+  --input: 210 24% 87%;
+  --ring: 42 100% 64%;
+  --radius: 1.25rem;
+  --font-sans: "Avenir Next", "Trebuchet MS", "Verdana", sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
+* {
+  box-sizing: border-box;
+}
 
-    /* --- Agora dark token set --- */
-
-    --background:       220 14% 5%;
-    --surface:          220 12% 9%;
-    --surface-elevated: 220 10% 13%;
-
-    --card:             220 12% 9%;
-    --card-foreground:  220 15% 95%;
-    --popover:          220 10% 13%;
-    --popover-foreground: 220 15% 95%;
-    --muted:            220 12% 9%;
-
-    --border:           220 10% 18%;
-    --input:            220 10% 18%;
-
-    --foreground:       220 15% 95%;
-    --muted-foreground: 220 10% 50%;
-
-    --primary:            194 100% 50%;
-    --primary-foreground: 220 14% 5%;
-
-    --secondary:            220 10% 13%;
-    --secondary-foreground: 220 15% 95%;
-
-    --accent:            194 100% 50%;
-    --accent-foreground: 220 14% 5%;
-
-    --destructive:            0 72% 58%;
-    --destructive-foreground: 0 0% 100%;
-
-    --ring: 194 100% 50%;
-
-    --chart-1: 194 100% 50%;
-    --chart-2: 220 10% 60%;
-    --chart-3: 220 10% 40%;
-    --chart-4: 0 72% 58%;
-    --chart-5: 150 60% 45%;
-
-    --sidebar-background:         220 12% 9%;
-    --sidebar-foreground:         220 15% 95%;
-    --sidebar-primary:            194 100% 50%;
-    --sidebar-primary-foreground: 220 14% 5%;
-    --sidebar-accent:             220 10% 13%;
-    --sidebar-accent-foreground:  220 15% 95%;
-    --sidebar-border:             220 10% 18%;
-    --sidebar-ring:               194 100% 50%;
-
-    /* Agent visualizer accent ramp used by the current conversation UI. */
-    --viz-stop-1: 194 100% 58%;
-    --viz-stop-2: 215 42% 72%;
-    --viz-stop-3: 272 62% 72%;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  font-family: var(--font-sans);
+  margin: 0;
+  min-height: 100vh;
+  background: hsl(var(--background));
   color: hsl(var(--foreground));
-  background-color: hsl(var(--background));
+  font-family: var(--font-sans);
 }
 
-/* --- Entry animations --- */
+button,
+input {
+  font: inherit;
+}
 
 @keyframes fade-up {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -156,39 +59,131 @@ body {
   }
 }
 
+@keyframes egg-wobble {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-7deg);
+  }
+  50% {
+    transform: rotate(6deg);
+  }
+  75% {
+    transform: rotate(-4deg);
+  }
+}
+
+@keyframes float-character {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+@keyframes leaf-sway {
+  0%,
+  100% {
+    transform: rotate(-1deg) translateY(0px);
+  }
+  50% {
+    transform: rotate(2deg) translateY(-4px);
+  }
+}
+
+@keyframes shell-shard-burst {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.6) rotate(0deg);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(54px) scale(1) rotate(var(--shard-rotate, 18deg));
+  }
+}
+
+@keyframes hatch-sparkle {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.4);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-28px) scale(1.15);
+  }
+}
+
+@keyframes mic-pulse {
+  0% {
+    opacity: 0.9;
+    transform: scale(0.92);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.28);
+  }
+}
+
+@keyframes wave-bounce {
+  0%,
+  100% {
+    transform: scaleY(0.45);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
 .animate-fade-up {
-  animation: fade-up 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: fade-up 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.animate-fade-up-d1 { animation-delay: 60ms; }
-.animate-fade-up-d2 { animation-delay: 120ms; }
-.animate-fade-up-d3 { animation-delay: 180ms; }
+.animate-egg-wobble {
+  animation: egg-wobble 700ms ease-in-out infinite;
+}
 
-/* --- MicButtonWithVisualizer: force a true circle ---
-   The parent flex can stretch the <button> unevenly. */
-.conversation-mic-host {
-  flex-shrink: 0;
+.animate-float-character {
+  animation: float-character 900ms ease-in-out infinite;
 }
-.conversation-mic-host > button {
-  aspect-ratio: 1 / 1;
-  width: 3rem;
-  height: 3rem;
-  min-width: 3rem;
-  min-height: 3rem;
-  max-width: 3rem;
-  max-height: 3rem;
-  border-radius: 9999px;
-  padding: 0;
-  box-sizing: border-box;
-  overflow: visible; /* Web Audio bar visualizer in bottom band; avoid clipping */
+
+.animate-leaf-sway {
+  animation: leaf-sway 4.4s ease-in-out infinite;
 }
-@media (min-width: 640px) {
-  .conversation-mic-host > button {
-    width: 3.5rem;
-    height: 3.5rem;
-    min-width: 3.5rem;
-    min-height: 3.5rem;
-    max-width: 3.5rem;
-    max-height: 3.5rem;
+
+.animate-shell-shard {
+  animation: shell-shard-burst 780ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-hatch-sparkle {
+  animation: hatch-sparkle 720ms ease-out both;
+}
+
+.animate-mic-pulse {
+  animation: mic-pulse 1.4s ease-out infinite;
+}
+
+.animate-wave-bounce {
+  transform-origin: bottom center;
+  animation: wave-bounce 820ms ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

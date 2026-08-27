@@ -1,0 +1,7 @@
+{
+  "projectId": "lEZ7VueBt",
+  "projectName": "ConvoAI",
+  "region": "global",
+  "projectType": "nextjs",
+  "envPath": ".env.local"
+}

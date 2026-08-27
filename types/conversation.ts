@@ -1,4 +1,6 @@
 import type { RTMClient } from 'agora-rtm';
+import type { ReactNode } from 'react';
+import type { LearningCharacter } from '@/lib/characters/types';
 
 export interface AgoraTokenData {
   token: string;
@@ -32,4 +34,11 @@ export interface ConversationComponentProps {
   rtmClient: RTMClient;
   onTokenWillExpire: (uid: string) => Promise<AgoraRenewalTokens>;
   onEndConversation: () => void;
+  visualizerOverride?: ReactNode;
+  uiMode?: 'default' | 'storybook';
+  character?: LearningCharacter;
+  scene?: 'eggs' | 'jungle' | 'globe';
+  soundEnabled?: boolean;
+  onToggleSound?: () => void;
+  showDebug?: boolean;
 }

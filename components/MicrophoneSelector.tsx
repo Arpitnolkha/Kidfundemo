@@ -70,7 +70,6 @@ export function MicrophoneSelector({
     try {
       await localMicrophoneTrack.setDevice(deviceId);
       setCurrentDeviceId(deviceId);
-      // console.log('Microphone device changed to:', deviceId);
     } catch (error) {
       console.error('Error changing microphone device:', error);
     }
@@ -83,7 +82,6 @@ export function MicrophoneSelector({
         const AgoraRTC = (await import('agora-rtc-react')).default;
 
         AgoraRTC.onMicrophoneChanged = async (changedDevice) => {
-          // console.log('Microphone changed:', changedDevice);
           // Refresh device list
           await fetchMicrophones();
 

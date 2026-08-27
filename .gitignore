@@ -87,6 +87,9 @@ web_modules/
 .next
 out
 
+# Browser test output
+test-results/
+
 # vercel
 .vercel
 

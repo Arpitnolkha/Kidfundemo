@@ -65,8 +65,8 @@ types/               Shared TypeScript route/component contracts
 
 ## Static and Styling Assets
 
-- `public/*`: icons, logos, and heading SVG assets used in pre-call/in-call experience.
-- `app/globals.css` and `styles/globals.css`: baseline theme/layout styles.
+- `public/*`: icons, logos, and illustration assets used by the application.
+- `app/globals.css`: baseline theme/layout styles.
 - `tailwind.config.ts`: utility class scan and theme extension.
 
 ## Verification Path Mapping

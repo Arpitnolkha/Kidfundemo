@@ -1,15 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {
+  AresSTT,
   AgoraClient,
   Agent,
   Area,
-  DeepgramSTT,
   ExpiresIn,
-  MiniMaxTTS,
+  MurfTTS,
   OpenAI,
 } from 'agora-agents';
 import { ClientStartRequest, AgentResponse } from '@/types/conversation';
 import { DEFAULT_AGENT_UID } from '@/lib/agora';
+import { getInteractionLanguage, getMurfRuntimeConfig } from '@/lib/agora/runtimeConfig';
 
 // System prompt that defines the agent's personality and behavior.
 // Swap this out to change what the agent talks about.
@@ -81,9 +82,9 @@ export async function POST(request: NextRequest) {
       appId,
       appCertificate,
     });
+    const murfConfig = getMurfRuntimeConfig();
 
-    // Pipeline: Deepgram (reseller) STT → OpenAI (reseller) LLM → MiniMax (reseller) TTS.
-    // Omit vendor API keys for supported models — AgentKit infers reseller presets on start (see Agora Console / billing).
+    // Pipeline: Ares STT → OpenAI (reseller) LLM → Murf TTS.
     const agent = new Agent({
       client,
       instructions: ADA_PROMPT,
@@ -92,6 +93,7 @@ export async function POST(request: NextRequest) {
       maxHistory: 50,
       // VAD controls how the agent detects the start and end of a user's turn.
       turnDetection: {
+        language: getInteractionLanguage(),
         config: {
           speech_threshold: 0.5,
           start_of_speech: {
@@ -125,16 +127,7 @@ export async function POST(request: NextRequest) {
       },
     })
       .withStt(
-        new DeepgramSTT({
-          model: 'nova-3',
-          language: 'en',
-        }),
-        // BYOK: uncomment the following block and set NEXT_DEEPGRAM_API_KEY
-        // new DeepgramSTT({
-        //   apiKey: requireEnv('NEXT_DEEPGRAM_API_KEY'),
-        //   model: 'nova-3',
-        //   language: 'en',
-        // }),
+        new AresSTT(),
       )
       .withLlm(
         new OpenAI({
@@ -162,9 +155,15 @@ export async function POST(request: NextRequest) {
         // }),
       )
       .withTts(
-        new MiniMaxTTS({
-          model: 'speech_2_6_turbo',
-          voiceId: 'English_captivating_female1',
+        new MurfTTS({
+          key: requireEnv('MURF_API_KEY'),
+          voiceId: murfConfig.voiceId,
+          model: murfConfig.model,
+          locale: murfConfig.locale,
+          baseUrl: murfConfig.baseUrl,
+          rate: murfConfig.rate,
+          pitch: murfConfig.pitch,
+          sampleRate: murfConfig.sampleRate,
         }),
         // BYOK — ElevenLabs (set NEXT_ELEVENLABS_API_KEY; optional NEXT_ELEVENLABS_VOICE_ID)
         // new (await import('agora-agents')).ElevenLabsTTS({

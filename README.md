@@ -1,186 +1,220 @@
-# Agora Conversational AI Next.js Quickstart
+# Kids Storybook Voice Demo
 
-[![Build](https://github.com/AgoraIO-Conversational-AI/agent-quickstart-nextjs/actions/workflows/build-check.yml/badge.svg)](https://github.com/AgoraIO-Conversational-AI/agent-quickstart-nextjs/actions/workflows/build-check.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![Node](https://img.shields.io/badge/node-%3E%3D22-brightgreen)](https://nodejs.org/)
+A polished Next.js demo for children built on top of the official Agora Conversational AI quickstart. The app offers three playful, visual routes:
 
-Build a production-style voice agent in minutes with Next.js and the Agora Conversational AI Engine, including voice agent visualizer ([Agent UIKit](https://agoraio-conversational-ai.github.io/agent-uikit/)), live transcript, and real-time pipeline latency via `AGENT_METRICS` ([Agent Toolkit](https://github.com/AgoraIO-Conversational-AI/agent-client-toolkit-ts)).
+- `/eggs` for hatching five eggs into baby animal characters
+- `/jungle` for exploring a picture-book jungle full of talking hotspots
+- `/globe` for spinning a real 3D Earth and speaking with country guides
 
-## Prerequisites
+The default development path is safe demo mode so the UI stays explorable without live Agora credentials. Live mode keeps Agora credentials server-side and uses documented Agora token generation plus character-scoped agent startup routes.
 
-- [Node.js 22+](https://nodejs.org/en/download/)
-- [pnpm](https://pnpm.io/installation)
-- [Agora CLI](https://github.com/AgoraIO-Community/cli)
+## Architecture Overview
 
-## Run It
+- `app/` holds the App Router pages and Agora API routes.
+- `components/eggs`, `components/jungle`, and `components/globe` render the three experiences.
+- `components/characters/CharacterStage.tsx` powers the shared conversation dock.
+- `lib/characters` stores every child-facing persona as typed data.
+- `lib/ai` contains prompt building and domain-boundary classification.
+- `lib/game/store.ts` holds the Zustand session state.
+- `lib/agora` keeps the live-mode token and agent helpers separate from the UI.
 
-Getting started is quick and easy: install the CLI _(skip if you already have it)_ , scaffold the Next.js quickstart using the Agora CLI, install dependencies, and run.
+```mermaid
+flowchart LR
+  Child["Child taps a scene entity"] --> UI["Next.js storybook UI"]
+  UI --> Store["Zustand session store"]
+  UI --> Demo["Demo voice layer"]
+  UI --> Live["Live mode request"]
+  Live --> Token["/api/agora/token"]
+  Live --> Start["/api/agora/agent/start"]
+  Start --> Agora["Agora Conversational AI Engine"]
+  Agora --> RTC["Agora RTC + RTM"]
+  RTC --> UI
+  Demo --> UI
+```
 
-1. **Install the Agora CLI and sign in**
-   _(skip if `agora` is already on your PATH)_:
+## Technology Choices
+
+- Next.js App Router with React and TypeScript
+- Tailwind CSS for the picture-book styling and motion
+- amCharts 5 Maps with an orthographic projection for the interactive globe
+- Official `@amcharts/amcharts5-geodata/worldLow` country boundaries
+- Zustand for scene, discovery, and conversation state
+- Zod for environment and API validation
+- Agora documented packages already present in the quickstart:
+  - `agora-rtc-sdk-ng`
+  - `agora-rtm`
+  - `agora-token`
+  - `agora-agents`
+- Vitest for unit tests
+- Playwright for smoke coverage
+
+## Local Installation
+
+1. Use Node `24` in this repo:
 
    ```bash
-   curl -fsSL https://raw.githubusercontent.com/AgoraIO/cli/main/install.sh | sh -s -- --add-to-path
-   agora login
+   nvm install
+   nvm use
    ```
 
-2. **Scaffold and run**
-   `agora init` clones the starter, binds an Agora project, and writes `.env.local`. (replace `my-nextjs-demo` with your own project name):
+2. Install `pnpm` if needed:
 
    ```bash
-   agora init my-nextjs-demo --template nextjs
-   cd my-nextjs-demo
+   corepack enable
+   corepack prepare pnpm@latest --activate
+   ```
+
+3. Install dependencies:
+
+   ```bash
    pnpm install
+   ```
+
+4. Copy the environment file:
+
+   ```bash
+   cp .env.example .env.local
+   ```
+
+5. Start the app:
+
+   ```bash
    pnpm dev
    ```
 
-3. Open [http://localhost:3000](http://localhost:3000) and click **Start conversation**.
+## Environment Variables
 
-If the agent does not join or transcripts do not appear, run **`agora project doctor --deep`** to check credentials, feature enablement, network reachability, and local env binding.
+`.env.example` includes the supported names.
 
-### Working from a clone of this repository
+- `NEXT_PUBLIC_DEMO_MODE=true` keeps the app fully explorable with mock voice behavior.
+- `NEXT_PUBLIC_SHOW_DEV_PANEL=true` reveals a developer-only input for smoke testing and domain-boundary checks.
+- `NEXT_PUBLIC_AGORA_APP_ID` is the only Agora value that may be exposed to the browser.
+- `NEXT_AGORA_APP_CERTIFICATE` must stay server-side.
+- `OPENAI_API_KEY` is optional and reserved for future classifier/provider expansion.
 
-Use this path if you already cloned **this** repo (for example to contribute or fork):
+## Agora Console Setup
 
-```bash
-git clone https://github.com/AgoraIO-Conversational-AI/agent-quickstart-nextjs.git
-cd agent-quickstart-nextjs
-agora login
-agora project use <your-project>
-pnpm install
-agora project env write .env.local
-agora project doctor --deep
-pnpm dev
-```
+Use the developer’s own testing account and local environment variables only.
 
-### Deploy to Vercel
+1. Select the existing Agora project that already has `rtc`, `rtm`, and `convoai` enabled.
+2. Bind the repo to that project with the Agora CLI:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FAgoraIO-Conversational-AI%2Fagent-quickstart-nextjs&project-name=agent-quickstart-nextjs&repository-name=agent-quickstart-nextjs&env=NEXT_PUBLIC_AGORA_APP_ID,NEXT_AGORA_APP_CERTIFICATE&envDescription=Agora%20credentials%20needed%20to%20run%20the%20app&envLink=https%3A%2F%2Fgithub.com%2FAgoraIO-Conversational-AI%2Fagent-quickstart-nextjs%23run-it&demo-title=Agora%20Conversational%20AI%20Next.js%20Quickstart&demo-description=Official%20Next.js%20quickstart%20for%20building%20browser-based%20voice%20AI%20with%20Agora&demo-image=https%3A%2F%2Fraw.githubusercontent.com%2FAgoraIO-Conversational-AI%2Fagent-quickstart-nextjs%2Fmain%2F.github%2Fassets%2FConversation-Ai-Client.gif)
+   ```bash
+   agora login
+   agora project use <your-project>
+   agora project env write .env.local
+   ```
 
-To populate Vercel env vars from your bound Agora project:
+3. Verify readiness:
 
-```bash
-agora project use <your-project>
-agora project env write .env.local
-rg "^(NEXT_PUBLIC_AGORA_APP_ID|NEXT_AGORA_APP_CERTIFICATE)=" .env.local
-```
+   ```bash
+   agora project doctor --deep
+   ```
 
-Copy those two values into Vercel Project Settings -> Environment Variables.
+This project intentionally avoids creating new Agora projects or modifying account settings automatically.
 
-### Environment variables
+## Enabling Conversational AI
 
-Defined in [`env.local.example`](env.local.example).
+The live-mode routes in `app/api/agora/agent/*` use documented `agora-agents` APIs and start one character-scoped agent session at a time. Character switching is implemented by stopping the previous session and starting a new one with updated instructions.
 
-| Variable                     | Required | Default  | Notes                                                                                          |
-| ---------------------------- | :------: | :------: | ---------------------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_AGORA_APP_ID`   |    ✅    |    —     | Agora Console → Project → App ID.                                                              |
-| `NEXT_AGORA_APP_CERTIFICATE` |    ✅    |    —     | Agora Console → Project → App Certificate. **Server-side only.**                               |
-| `NEXT_PUBLIC_AGENT_UID`      |          | `123456` | Must match the `agentUid` in [`app/api/invite-agent/route.ts`](app/api/invite-agent/route.ts). |
-| `NEXT_AGENT_GREETING`        |          |    —     | Override the agent's opening line.                                                             |
+## Configuring STT
 
-The default agent configuration in [`app/api/invite-agent/route.ts`](app/api/invite-agent/route.ts) uses Agora-managed STT, LLM, and TTS, so no extra vendor API keys are required for the base quickstart.
+The current live-mode helper uses documented `AresSTT`. No separate STT vendor key is required, and no STT credential is exposed to the client.
 
-> **Default vs BYOK** — the quickstart ships with Agora-managed inference for a zero-key install. Switch to BYOK below when you need to bring your own provider quotas, models, or vendors.
+## Configuring LLM
 
-## Commands
+The current live-mode helper uses documented Agora-managed OpenAI through `OpenAI` with `gpt-4o-mini`. Character behavior is constrained by `buildCharacterPrompt(...)` and the domain classifier.
 
-```bash
-# Dev
-pnpm dev                # start the Next.js dev server
+## Configuring TTS
 
-# Quality
-pnpm run lint           # eslint
-pnpm run typecheck      # tsc --noEmit
-pnpm run doctor         # local prereqs + env binding
+The current live-mode helper uses documented `MiniMaxTTS`. The app keeps the voice layer modular so a future provider switch can stay inside `lib/agora/agent.ts`.
 
-# CI / pre-ship
-pnpm run verify:api     # API contract checks
-pnpm run build          # production build
-pnpm run verify         # doctor + lint + typecheck + verify:api + build
-```
+## Running Demo Mode
 
-Run `pnpm run verify` before shipping changes — it covers local prerequisites, lint, type safety, the core API route contracts, and the production build.
-
-## Architecture
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./system-architecture-dark.svg">
-  <img src="./system-architecture.svg" alt="System architecture">
-</picture>
-
-The browser fetches a combined RTC + RTM token (`buildTokenWithRtm`) from this app, joins the channel using a single RTC client, and uses RTM as the data channel for transcript, agent state, metrics, and error events. The Conversational AI Engine joins the same channel as the configured `NEXT_PUBLIC_AGENT_UID` and runs the STT → LLM → TTS pipeline in Agora Cloud.
-
-## What You Get
-
-- browser voice client built with Next.js App Router
-- RTC audio plus RTM transcript and state events
-- server routes for token generation, invite, and stop
-- [`AgentVisualizer`](https://agoraio-conversational-ai.github.io/agent-uikit/) for agent state and a built-in transcript panel for live turns
-- per-stage latency header driven by `AGENT_METRICS`
-- Agora-managed default STT, LLM, and TTS configuration
-
-## How It Works
-
-1. The browser requests an RTC + RTM token from `/api/generate-agora-token`.
-2. The backend invites an Agora cloud agent with `/api/invite-agent`.
-3. The browser joins the channel and publishes mic audio.
-4. The client receives transcript, agent state, and `AGENT_METRICS` (per-stage latency) events over RTM.
-5. On end, the client calls `/api/stop-conversation`, logs out RTM, and unmounts the call view so Agora React hooks clean up RTC publish/join and the local microphone track.
-
-## Optional BYOK
-
-The quickstart defaults to Agora-managed inference. To bring your own keys, uncomment the matching blocks in [`app/api/invite-agent/route.ts`](app/api/invite-agent/route.ts) and add the corresponding env vars.
+Demo mode is the recommended default during UI development.
 
 ```bash
-# Deepgram STT
-NEXT_DEEPGRAM_API_KEY=...
-
-# OpenAI-compatible LLM
-NEXT_LLM_URL=https://api.openai.com/v1/chat/completions
-NEXT_LLM_API_KEY=...
-
-# ElevenLabs TTS
-NEXT_ELEVENLABS_API_KEY=...
-NEXT_ELEVENLABS_VOICE_ID=...
+NEXT_PUBLIC_DEMO_MODE=true pnpm dev
 ```
 
-## Repo Map
+What demo mode gives you:
 
-- `app/api/generate-agora-token/route.ts` — issues RTC + RTM tokens
-- `app/api/invite-agent/route.ts` — starts the agent session and configures the pipeline
-- `app/api/stop-conversation/route.ts` — stops the agent session
-- `components/LandingPage.tsx` — entry point: token fetch, RTM login, conversation lifecycle
-- `components/ConversationComponent.tsx` — RTC client, transcript state, `AGENT_METRICS`, mic release
-- `components/QuickstartConversationLayout.tsx` — in-call header, transcript rail, controls dock
-- `components/QuickstartPipelineMetrics.tsx` — per-stage latency chips in the header
-- `components/QuickstartTranscriptPanel.tsx` — live transcript rail
-- `components/QuickstartPreCallCard.tsx` — pre-call hero card
-- `lib/conversation.ts` — transcript normalization and visualizer state mapping
-- `AGENTS.md` — primary agent-facing guide
+- full `/`, `/eggs`, `/jungle`, and `/globe` navigation
+- hatching and entity selection flows
+- browser speech-synthesis replies
+- microphone permission handling and optional browser speech recognition when available
+- a dev-only test input when `NEXT_PUBLIC_SHOW_DEV_PANEL=true`
 
-## Troubleshooting
+## Running Live Mode
 
-- **Agent does not join or transcripts are missing:** run `agora project doctor --deep`.
-- **`pnpm run doctor` fails:** run `agora project env write .env.local`, then retry.
-- **Manual clone / env values:** `agora project use <your-project>` then `agora project env write .env.local`.
-- **RTM login fails:** keep [`app/api/generate-agora-token/route.ts`](app/api/generate-agora-token/route.ts) on `RtcTokenBuilder.buildTokenWithRtm` — RTC-only tokens will not satisfy `rtm.login`.
-- **Transcript speakers inverted:** check the `uid === "0"` remap in [`components/ConversationComponent.tsx`](components/ConversationComponent.tsx).
-- **Agent never appears in channel:** ensure `NEXT_PUBLIC_AGENT_UID` matches the value used in [`app/api/invite-agent/route.ts`](app/api/invite-agent/route.ts).
+Live mode requires valid Agora values in `.env.local`.
 
-## More Docs
+```bash
+NEXT_PUBLIC_DEMO_MODE=false pnpm dev
+```
 
-- [docs/ai/L0_repo_card.md](./docs/ai/L0_repo_card.md)
-- [docs/ai/RECIPE.md](./docs/ai/RECIPE.md)
-- [AGENTS.md](./AGENTS.md)
+In live mode the documented server routes are ready for:
 
-## Contributing
+- short-lived RTC + RTM token generation
+- starting one active character session
+- stopping the session when the scene changes or the experience ends
+- server-side prompt and credential handling
 
-Pull requests welcome — see [CONTRIBUTING.md](./CONTRIBUTING.md) for development setup and conventions.
+The UI is still intentionally conservative about live-agent usage during development so sessions stay short and are easy to terminate.
 
-## Security
+## Troubleshooting Microphone Permission
 
-Please do **not** open public issues for security reports. Email security@agora.io with details and reproduction steps.
+- If the browser blocks microphone access, the app shows a child-friendly retry message.
+- Reset site microphone permissions in the browser and try again.
+- On Safari or unsupported browsers, demo mode may fall back to suggestion chips and the dev panel rather than live speech recognition.
 
-## License
+## Troubleshooting Agora Connection
 
-Released under the [MIT License](./LICENSE).
+- Run `agora project doctor --deep`.
+- Confirm `NEXT_PUBLIC_AGORA_APP_ID` and `NEXT_AGORA_APP_CERTIFICATE` are present in `.env.local`.
+- Make sure the selected Agora project has `rtc`, `rtm`, and `convoai` enabled.
+- Keep live sessions short and stop them when leaving the scene.
+
+## Replacing Placeholder Art With Rive Assets
+
+The current visuals are CSS and emoji-based placeholders on purpose.
+
+- Replace the main stage art inside `components/characters/LipSyncCharacter.tsx`.
+- Replace egg artwork in `public/assets/animals/`.
+- Replace Jungle scene and entity artwork through `lib/jungle/assets.ts`.
+- Keep the component props the same so interaction logic stays untouched.
+
+The lip-sync contract is simple:
+
+- `mouthOpen = 0` means closed
+- `mouthOpen = 1` means fully open
+
+That makes it easy to map a future Rive parameter or animation state to the existing stage component.
+
+## Deployment Instructions
+
+1. Configure `.env.local` values in your hosting platform as server environment variables.
+2. Keep `NEXT_AGORA_APP_CERTIFICATE`, `OPENAI_API_KEY`, and any future provider keys server-only.
+3. Build and verify:
+
+   ```bash
+   pnpm run verify
+   ```
+
+4. Deploy with the same Node major version used locally.
+
+## Testing
+
+- Unit tests:
+
+  ```bash
+  pnpm test
+  ```
+
+- Playwright smoke tests:
+
+  ```bash
+  pnpm test:e2e
+  ```
+
+The smoke suite targets demo mode so CI does not require live Agora credentials.

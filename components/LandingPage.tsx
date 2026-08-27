@@ -76,10 +76,8 @@ export default function LandingPage() {
 
     try {
       // 1. Fetch RTC token + channel
-      // console.log('Fetching Agora token...');
       const agoraResponse = await fetch('/api/generate-agora-token');
       const responseData = await agoraResponse.json();
-      // console.log('Agora token response: uid =', responseData.uid, 'channel =', responseData.channel);
 
       if (!agoraResponse.ok) {
         throw new Error(
@@ -122,7 +120,6 @@ export default function LandingPage() {
           );
           await rtm.login({ token: responseData.token });
           await rtm.subscribe(responseData.channel);
-          // console.log('RTM ready, channel:', responseData.channel);
           return rtm;
         })(),
       ]);
@@ -180,7 +177,6 @@ export default function LandingPage() {
     // Stop the AI agent
     if (agoraData?.agentId) {
       try {
-        // console.log('Stopping agent:', agoraData.agentId);
         const response = await fetch('/api/stop-conversation', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -189,7 +185,6 @@ export default function LandingPage() {
         if (!response.ok) {
           console.error('Failed to stop agent:', await response.text());
         }
-        // else console.log('Agent stopped successfully');
       } catch (error) {
         console.error('Error stopping agent:', error);
       }

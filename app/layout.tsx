@@ -8,9 +8,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'Talk to your voice agent | Agora',
+  title: 'Kids Storybook Voice Demo',
   description:
-    "Next.js quickstart: real-time voice agent with live transcript, streaming audio, and low latency from Agora's Conversational AI Engine—API routes in one repo.",
+    'An interactive children’s storybook with hatching eggs, a talking jungle, a 3D world globe, and Agora Conversational AI.',
   icons: {
     icon: [
       { url: '/favicon.ico' },
