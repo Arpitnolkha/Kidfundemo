@@ -586,6 +586,7 @@ export default function ConversationComponent({
   }, [agentState, character?.name, isEnabled]);
 
   if (uiMode === 'storybook' && character) {
+    const hasImage = Boolean(character.imageSrc);
     const accentStyle = {
       background: `linear-gradient(180deg, ${character.palette.body}, ${character.palette.shell})`,
       boxShadow: `0 26px 48px ${character.palette.glow}`,
@@ -632,32 +633,40 @@ export default function ConversationComponent({
             </h1>
           </div>
 
-          <div className="grid flex-1 gap-5 lg:grid-cols-[minmax(0,25rem)_minmax(0,1fr)] lg:items-center lg:gap-8">
-            <div className="flex flex-col items-center justify-center lg:justify-end">
-              <div className="animate-float-character">
-                {visualizerOverride ?? (
-                  <LipSyncCharacter
-                    emoji={character.emoji}
-                    imageSrc={character.imageSrc}
-                    name={character.name}
-                    palette={character.palette}
-                    mouthOpen={agentState === 'speaking' ? 0.8 : 0.15}
-                    speaking={agentState === 'speaking'}
-                    size="large"
-                  />
-                )}
+          <div
+            className={
+              hasImage
+                ? 'grid flex-1 gap-5 lg:grid-cols-[minmax(0,25rem)_minmax(0,1fr)] lg:items-center lg:gap-8'
+                : 'mx-auto grid w-full max-w-[44rem] flex-1 grid-cols-1 items-start gap-5'
+            }
+          >
+            {hasImage ? (
+              <div className="flex flex-col items-center justify-center lg:justify-end">
+                <div className="animate-float-character">
+                  {visualizerOverride ?? (
+                    <LipSyncCharacter
+                      emoji={character.emoji}
+                      imageSrc={character.imageSrc}
+                      name={character.name}
+                      palette={character.palette}
+                      mouthOpen={agentState === 'speaking' ? 0.8 : 0.15}
+                      speaking={agentState === 'speaking'}
+                      size="large"
+                    />
+                  )}
+                </div>
               </div>
-            </div>
+            ) : null}
 
-            <div className="flex flex-col gap-4 lg:gap-5">
-              <div className="animate-fade-up relative max-w-[28rem] self-center rounded-[30px] bg-white px-6 py-5 text-left shadow-[0_18px_34px_rgba(91,71,41,0.12)] lg:self-start">
+            <div className={`flex flex-col gap-4 lg:gap-5 ${hasImage ? '' : 'items-center'}`}>
+              <div className={`animate-fade-up relative self-center rounded-[30px] bg-white px-6 py-5 text-left shadow-[0_18px_34px_rgba(91,71,41,0.12)] ${hasImage ? 'max-w-[28rem] lg:self-start' : 'w-full max-w-[40rem]'}`}>
                 <div className="absolute left-[-10px] top-[56%] h-6 w-6 -translate-y-1/2 rotate-45 rounded-[6px] bg-white" />
                 <p className="text-lg font-semibold leading-8 text-slate-800 sm:text-[1.5rem] sm:leading-[2.15rem]">
                   {latestCaption}
                 </p>
               </div>
 
-              <div className="max-w-[24rem] self-center rounded-[30px] bg-[#ffe19a] px-6 py-5 shadow-[0_18px_34px_rgba(196,149,52,0.18)] lg:self-start">
+              <div className={`self-center rounded-[30px] bg-[#ffe19a] px-6 py-5 text-left shadow-[0_18px_34px_rgba(196,149,52,0.18)] ${hasImage ? 'max-w-[24rem] lg:self-start' : 'w-full max-w-[36rem]'}`}>
                 <div className="inline-flex items-center gap-2 text-sm font-black uppercase tracking-[0.16em] text-amber-900">
                   <Sparkles className="h-4 w-4 fill-current" />
                   Did you know?
@@ -667,7 +676,7 @@ export default function ConversationComponent({
                 </p>
               </div>
 
-              <div className="flex flex-wrap justify-center gap-3 lg:justify-start">
+              <div className={`flex flex-wrap justify-center gap-3 ${hasImage ? 'lg:justify-start' : ''}`}>
                 {suggestedQuestions.map((question) => (
                   <button
                     key={question}

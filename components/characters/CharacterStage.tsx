@@ -35,6 +35,7 @@ export function CharacterStage({
 }) {
   const [mouthOpen, setMouthOpen] = useState(0.2);
   const [devQuestion, setDevQuestion] = useState('');
+  const hasImage = Boolean(character.imageSrc);
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -69,8 +70,8 @@ export function CharacterStage({
         </p>
       </div>
 
-      <div className="mt-5 grid gap-5 lg:mt-6 lg:grid-cols-[minmax(0,1fr)_minmax(14rem,20rem)] lg:items-center lg:gap-6">
-        <div>
+      <div className={`mt-5 grid gap-5 lg:mt-6 lg:items-center ${hasImage ? 'lg:grid-cols-[minmax(0,1fr)_minmax(14rem,20rem)] lg:gap-6' : 'mx-auto w-full max-w-[44rem] grid-cols-1'}`}>
+        <div className={hasImage ? '' : 'text-center'}>
           <div className="inline-flex items-center gap-2 rounded-full bg-amber-100 px-3 py-1 text-xs font-black uppercase tracking-[0.2em] text-amber-800">
             <Sparkles className="h-3.5 w-3.5" />
             {character.category}
@@ -90,7 +91,7 @@ export function CharacterStage({
             </p>
           </div>
 
-          <div className="mt-5 flex flex-wrap gap-3">
+          <div className={`mt-5 flex flex-wrap gap-3 ${hasImage ? '' : 'justify-center'}`}>
             <button
               type="button"
               onClick={async () => {
@@ -144,16 +145,18 @@ export function CharacterStage({
           ) : null}
         </div>
 
-        <div className="order-first flex justify-center lg:order-none lg:justify-end">
-          <LipSyncCharacter
-            emoji={character.emoji}
-            imageSrc={character.imageSrc}
-            name={character.name}
-            palette={character.palette}
-            mouthOpen={mouthOpen}
-            speaking={status === 'speaking'}
-          />
-        </div>
+        {hasImage ? (
+          <div className="order-first flex justify-center lg:order-none lg:justify-end">
+            <LipSyncCharacter
+              emoji={character.emoji}
+              imageSrc={character.imageSrc}
+              name={character.name}
+              palette={character.palette}
+              mouthOpen={mouthOpen}
+              speaking={status === 'speaking'}
+            />
+          </div>
+        ) : null}
       </div>
     </div>
   );

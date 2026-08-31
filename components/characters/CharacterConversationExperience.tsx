@@ -121,6 +121,7 @@ function StorybookConnectingScreen({
   message: string;
 }) {
   const suggestedQuestions = character.starterQuestions.slice(0, 3);
+  const hasImage = Boolean(character.imageSrc);
 
   return (
     <div className="relative flex min-h-[38rem] flex-col overflow-hidden rounded-[30px] bg-[linear-gradient(180deg,rgba(255,249,233,0.18),rgba(255,247,232,0.08))] px-5 py-5 text-slate-900 sm:px-7 sm:py-6">
@@ -163,20 +164,28 @@ function StorybookConnectingScreen({
           </h1>
         </div>
 
-        <div className="grid flex-1 gap-5 lg:grid-cols-[minmax(0,25rem)_minmax(0,1fr)] lg:items-center lg:gap-8">
-          <div className="flex flex-col items-center justify-center lg:justify-end">
-            <StorybookLiveVisualizer character={character} speaking={false} />
-          </div>
+        <div
+          className={
+            hasImage
+              ? 'grid flex-1 gap-5 lg:grid-cols-[minmax(0,25rem)_minmax(0,1fr)] lg:items-center lg:gap-8'
+              : 'mx-auto grid w-full max-w-[44rem] flex-1 grid-cols-1 items-start gap-5'
+          }
+        >
+          {hasImage ? (
+            <div className="flex flex-col items-center justify-center lg:justify-end">
+              <StorybookLiveVisualizer character={character} speaking={false} />
+            </div>
+          ) : null}
 
-          <div className="flex flex-col gap-4 lg:gap-5">
-            <div className="relative max-w-[28rem] self-center rounded-[30px] bg-white px-6 py-5 text-left shadow-[0_18px_34px_rgba(91,71,41,0.12)] lg:self-start">
+          <div className={`flex flex-col gap-4 lg:gap-5 ${hasImage ? '' : 'items-center'}`}>
+            <div className={`relative self-center rounded-[30px] bg-white px-6 py-5 text-left shadow-[0_18px_34px_rgba(91,71,41,0.12)] ${hasImage ? 'max-w-[28rem] lg:self-start' : 'w-full max-w-[40rem]'}`}>
               <div className="absolute left-[-10px] top-[56%] h-6 w-6 -translate-y-1/2 rotate-45 rounded-[6px] bg-white" />
               <p className="text-lg font-semibold leading-8 text-slate-800 sm:text-[1.5rem] sm:leading-[2.15rem]">
                 {character.voiceIntro}
               </p>
             </div>
 
-            <div className="max-w-[24rem] self-center rounded-[30px] bg-[#ffe19a] px-6 py-5 shadow-[0_18px_34px_rgba(196,149,52,0.18)] lg:self-start">
+            <div className={`self-center rounded-[30px] bg-[#ffe19a] px-6 py-5 text-left shadow-[0_18px_34px_rgba(196,149,52,0.18)] ${hasImage ? 'max-w-[24rem] lg:self-start' : 'w-full max-w-[36rem]'}`}>
               <div className="inline-flex items-center gap-2 text-sm font-black uppercase tracking-[0.16em] text-amber-900">
                 <span>✨</span>
                 Did you know?
@@ -186,7 +195,7 @@ function StorybookConnectingScreen({
               </p>
             </div>
 
-            <div className="flex flex-wrap justify-center gap-3 lg:justify-start">
+            <div className={`flex flex-wrap justify-center gap-3 ${hasImage ? 'lg:justify-start' : ''}`}>
               {suggestedQuestions.map((question) => (
                 <button
                   key={question}
