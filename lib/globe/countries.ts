@@ -1,6 +1,7 @@
 import type { GlobeCountryGuide } from '@/lib/globe/types';
+import { getGlobeCountryOptions } from '@/lib/globe/geo';
 
-export const globeCountryGuides: GlobeCountryGuide[] = [
+const featuredCountryGuides: GlobeCountryGuide[] = [
   {
     id: 'country-IND',
     kind: 'globe',
@@ -217,6 +218,100 @@ export const globeCountryGuides: GlobeCountryGuide[] = [
     discovery: { entityId: 'country-ZAF', title: 'Many Languages', summary: 'South Africa has eleven official languages.' },
     palette: { shell: '#168f67', body: '#e7f7e9', accent: '#e4bd45', glow: 'rgba(63,194,132,0.42)' },
   },
+];
+
+const fallbackPalettes = [
+  { shell: '#2d71b9', body: '#e8f4ff', accent: '#f3c84b', glow: 'rgba(67,157,225,0.4)' },
+  { shell: '#169b62', body: '#eaf9d9', accent: '#f5d33c', glow: 'rgba(69,210,117,0.42)' },
+  { shell: '#f7a43a', body: '#fff3d4', accent: '#138b63', glow: 'rgba(255,177,65,0.42)' },
+  { shell: '#4276c7', body: '#f7f8ff', accent: '#e6535e', glow: 'rgba(83,125,222,0.4)' },
+] as const;
+
+function countryFlag(iso2: string): string {
+  if (!/^[A-Z]{2}$/.test(iso2)) return '🌍';
+
+  return String.fromCodePoint(
+    ...[...iso2].map((letter) => 127397 + letter.charCodeAt(0)),
+  );
+}
+
+function createFallbackCountryGuide(
+  iso2: string,
+  countryName: string,
+): GlobeCountryGuide {
+  const paletteIndex = [...iso2].reduce(
+    (total, letter) => total + letter.charCodeAt(0),
+    0,
+  ) % fallbackPalettes.length;
+
+  return {
+    id: `country-${iso2}`,
+    kind: 'globe',
+    iso2,
+    agentEnabled: true,
+    name: `${countryName} Explorer`,
+    title: `Explore ${countryName}`,
+    species: 'country guide',
+    category: 'country',
+    habitat: countryName,
+    emoji: countryFlag(iso2),
+    personality: 'warm, curious, welcoming, and thoughtful',
+    introduction: `A friendly guide to ${countryName} for young world explorers.`,
+    voiceIntro: `Hello! Welcome to ${countryName}. Every country has its own places, landscapes, communities, and stories to discover.`,
+    voicePrompt: `Ask me about ${countryName}'s geography, places, languages, food, animals, landmarks, or traditions.`,
+    allowedTopics: [
+      countryName,
+      `${countryName} geography`,
+      `${countryName} cities and places`,
+      `${countryName} languages`,
+      `${countryName} food`,
+      `${countryName} animals and nature`,
+      `${countryName} landmarks`,
+      `${countryName} traditions`,
+      `${countryName} flag`,
+      `${countryName} history for children`,
+    ],
+    relatedTopics: [
+      'neighboring countries',
+      'nearby seas and oceans',
+      'regional geography',
+      'climate',
+      'culture',
+    ],
+    prohibitedTopics: [
+      'political persuasion',
+      'territorial advocacy',
+      'weapons',
+      'personal data',
+      'general assistant tasks',
+    ],
+    starterQuestions: [
+      `Where is ${countryName}?`,
+      `What is ${countryName} known for?`,
+      `What animals and nature can be found in ${countryName}?`,
+    ],
+    funFacts: [`${countryName} has its own place on the world map and many local stories to explore.`],
+    redirectLine: `That question belongs to another adventure. Ask me about ${countryName}, or spin the globe to explore somewhere else!`,
+    discovery: {
+      entityId: `country-${iso2}`,
+      title: `${countryName} Explorer`,
+      summary: `The child opened a world guide for ${countryName}.`,
+    },
+    palette: fallbackPalettes[paletteIndex],
+  };
+}
+
+const featuredCountryIds = new Set(
+  featuredCountryGuides.map((country) => country.iso2),
+);
+
+const generatedCountryGuides = getGlobeCountryOptions()
+  .filter((country) => !featuredCountryIds.has(country.id))
+  .map((country) => createFallbackCountryGuide(country.id, country.name));
+
+export const globeCountryGuides: GlobeCountryGuide[] = [
+  ...featuredCountryGuides,
+  ...generatedCountryGuides,
 ];
 
 export const globeCountryGuidesByIso2 = Object.fromEntries(

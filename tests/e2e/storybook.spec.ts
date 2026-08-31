@@ -41,7 +41,7 @@ test('globe country picker opens and closes an existing conversation popup', asy
   await page.getByRole('button', { name: 'Close conversation' }).click();
 
   await expect(page.getByRole('heading', { name: 'Explore the World' })).toBeVisible();
-  await expect(page.getByText('1 / 8 guides visited')).toBeVisible();
+  await expect(page.getByText(/1 \/ \d+ guides visited/)).toBeVisible();
 });
 
 test('real map polygon selects its country and dragging does not open a popup', async ({ page }) => {
@@ -94,11 +94,11 @@ for (const device of [
   });
 }
 
-test('unsupported countries use the shared selection path without starting an agent', async ({ page }) => {
+test('non-featured countries open a generated conversational guide', async ({ page }) => {
   await page.goto('/globe');
-  await page.getByLabel('Choose a country to explore').selectOption('NP');
-  await expect(page.getByText(/Nepal is on the map/i)).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Close conversation' })).toHaveCount(0);
+  await page.getByLabel('Choose a country to explore').selectOption('CN');
+  await expect(page.getByRole('heading', { name: 'Explore China' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Close conversation' })).toBeVisible();
 });
 
 test('orientation changes preserve the active country conversation', async ({ page }) => {

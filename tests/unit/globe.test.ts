@@ -17,9 +17,13 @@ describe('globe exploration', () => {
     });
   });
 
-  it('provides eight complete and uniquely mapped country guides', () => {
-    expect(globeCountryGuides).toHaveLength(8);
-    expect(new Set(globeCountryGuides.map((guide) => guide.iso2)).size).toBe(8);
+  it('provides a complete and uniquely mapped guide for every selectable country', () => {
+    const countries = getGlobeCountryOptions();
+
+    expect(globeCountryGuides).toHaveLength(countries.length);
+    expect(new Set(globeCountryGuides.map((guide) => guide.iso2)).size).toBe(
+      countries.length,
+    );
 
     for (const guide of globeCountryGuides) {
       expect(guide.agentEnabled).toBe(true);
@@ -27,6 +31,16 @@ describe('globe exploration', () => {
       expect(guide.starterQuestions).toHaveLength(3);
       expect(globeCountryGuidesByIso2[guide.iso2]).toBe(guide);
     }
+  });
+
+  it('creates a conversational guide for countries outside the featured set', () => {
+    const china = globeCountryGuidesByIso2.CN;
+    const nepal = globeCountryGuidesByIso2.NP;
+
+    expect(china.title).toBe('Explore China');
+    expect(china.id).toBe('country-CN');
+    expect(china.allowedTopics).toContain('China geography');
+    expect(nepal.title).toBe('Explore Nepal');
   });
 
   it('uses real atlas features for every enabled guide', () => {
