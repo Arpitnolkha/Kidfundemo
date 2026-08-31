@@ -12,6 +12,26 @@ test('eggs page loads and egg can hatch', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Pip the Chick' })).toBeVisible();
 });
 
+test('mobile egg artwork and hotspots share the same coordinate frame', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/eggs');
+
+  const scene = page.getByAltText("Who's Inside egg scene with five eggs children can tap.");
+  const bounds = await scene.boundingBox();
+  if (!bounds) throw new Error('Egg scene bounds were unavailable');
+
+  expect(Math.abs(bounds.width / bounds.height - 1.5)).toBeLessThan(0.02);
+
+  // Turtle occupies the second source-image hotspot, centered near 32% x / 58% y.
+  await page.mouse.click(
+    bounds.x + bounds.width * 0.32,
+    bounds.y + bounds.height * 0.58,
+  );
+  await expect(page.getByRole('heading', { name: 'Tilly the Turtle' })).toBeVisible({
+    timeout: 8000,
+  });
+});
+
 test('jungle page loads and entity can be selected', async ({ page }) => {
   await page.goto('/jungle');
   await page.getByRole('button', { name: /Flutter the Butterfly/i }).click();

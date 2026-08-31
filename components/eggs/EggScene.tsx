@@ -149,20 +149,20 @@ export function EggScene() {
           <h1 className="mt-3 text-4xl font-black tracking-tight text-slate-900 md:text-6xl">
             Who&apos;s Inside?
           </h1>
-          <p className="mt-4 text-lg leading-8 text-slate-700">
+          <p className="mt-4 text-base leading-7 text-slate-700 sm:text-lg sm:leading-8">
             Tap an egg to help it wiggle, crack, and hatch into a chatty baby animal.
             Each little friend knows its own world and loves short, curious questions.
           </p>
         </div>
 
-        <div className="relative mt-10 overflow-hidden rounded-[30px] border border-white/55 bg-white/35 shadow-[0_40px_110px_rgba(42,63,43,0.18)] backdrop-blur sm:rounded-[42px]">
-          <div className="relative aspect-[4/5] min-h-[28rem] w-full sm:aspect-[16/9] sm:min-h-0">
+        <div className="relative mt-6 overflow-hidden rounded-[30px] border border-white/55 bg-white/35 shadow-[0_40px_110px_rgba(42,63,43,0.18)] backdrop-blur sm:mt-10 sm:rounded-[42px]">
+          <div className="relative aspect-[3/2] w-full">
             <Image
               src="/assets/scenes/eggs.png"
               alt="Who's Inside egg scene with five eggs children can tap."
               fill
               priority
-              className="object-cover"
+              className="object-contain"
             />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(255,255,255,0.15),transparent_40%)]" />
             {eggCharacters.map((character) => {
