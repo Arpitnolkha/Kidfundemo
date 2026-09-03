@@ -748,14 +748,14 @@ export default function ConversationComponent({
                   <p className="text-xs font-black uppercase tracking-[0.14em] text-[#7f8f54]">
                     You{latestUserTranscript.final ? '' : ' ...'}
                   </p>
-                  <p className="mt-1 text-base font-semibold leading-6 text-slate-800 sm:text-lg">
+                  <p className="mt-1 text-lg font-semibold leading-7 text-slate-800 sm:text-xl sm:leading-8">
                     {latestUserTranscript.text}
                   </p>
                 </div>
               ) : null}
               <div className={`animate-fade-up relative self-center rounded-[30px] bg-white px-6 py-5 text-left shadow-[0_18px_34px_rgba(91,71,41,0.12)] ${hasImage ? 'max-w-[28rem] lg:self-start' : 'w-full max-w-[40rem]'}`}>
                 <div className="absolute left-[-10px] top-[56%] h-6 w-6 -translate-y-1/2 rotate-45 rounded-[6px] bg-white" />
-                <p className="text-lg font-semibold leading-8 text-slate-800 sm:text-[1.5rem] sm:leading-[2.15rem]">
+                <p className="text-lg font-semibold leading-7 text-slate-800 sm:text-xl sm:leading-8">
                   {latestCaption}
                 </p>
               </div>
