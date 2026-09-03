@@ -263,6 +263,7 @@ export function CharacterConversationExperience({
   const sessionRef = useRef<LiveSessionResources>({});
   const searchParams = useSearchParams();
   const showDebug = searchParams.get('debug') === 'true';
+  const showLatencyDebug = searchParams.get('debugLatency') === 'true';
 
   const sessionKey = useMemo(
     () => `${scene}:${character.id}:${discoveries}`,
@@ -487,6 +488,7 @@ export function CharacterConversationExperience({
                 soundEnabled={soundEnabled}
                 onToggleSound={onToggleSound}
                 showDebug={showDebug}
+                showLatencyDebug={showLatencyDebug}
                 visualizerOverride={
                   <StorybookLiveVisualizer
                     character={character}

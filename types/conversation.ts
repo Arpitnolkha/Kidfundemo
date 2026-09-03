@@ -41,4 +41,5 @@ export interface ConversationComponentProps {
   soundEnabled?: boolean;
   onToggleSound?: () => void;
   showDebug?: boolean;
+  showLatencyDebug?: boolean;
 }

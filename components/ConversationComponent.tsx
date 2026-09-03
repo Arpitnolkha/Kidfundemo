@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { ArrowLeft, Bug, Mic, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import AgoraRTC, {
   useRTCClient,
@@ -48,6 +48,15 @@ import {
 import { QuickstartTranscriptPanel } from './QuickstartTranscriptPanel';
 import type { ConversationComponentProps } from '@/types/conversation';
 import { LipSyncCharacter } from '@/components/characters/LipSyncCharacter';
+import {
+  LatencyDebugPanel,
+  type LatencyTimings,
+} from '@/components/LatencyDebugPanel';
+import {
+  mergeTranscriptStreamEvents,
+  toolkitTranscriptToStreamEvents,
+  type TranscriptStreamEvent,
+} from '@/lib/agora/transcriptStream';
 
 // Cap the displayed issues list to avoid overwhelming the UI during a cascade of errors.
 const MAX_CONNECTION_ISSUES = 6;
@@ -137,6 +146,7 @@ export default function ConversationComponent({
   soundEnabled = true,
   onToggleSound,
   showDebug = false,
+  showLatencyDebug = false,
 }: ConversationComponentProps) {
   const client = useRTCClient();
   const remoteUsers = useRemoteUsers();
@@ -156,6 +166,12 @@ export default function ConversationComponent({
   const [rawTranscript, setRawTranscript] = useState<
     TranscriptHelperItem<Partial<UserTranscription | AgentTranscription>>[]
   >([]);
+  const [transcriptEvents, setTranscriptEvents] = useState<
+    TranscriptStreamEvent[]
+  >([]);
+  const [latencyTimings, setLatencyTimings] = useState<LatencyTimings>({});
+  const transcriptObservationRef = useRef(new Map<string, string>());
+  const finalizedTranscriptIdsRef = useRef(new Set<string>());
   const [agentState, setAgentState] = useState<AgentState | null>(null);
   const [agentMetrics, setAgentMetrics] = useState<QuickstartAgentMetric[]>([]);
   const [connectionIssues, setConnectionIssues] = useState<ConnectionIssue[]>(
@@ -267,7 +283,9 @@ export default function ConversationComponent({
           rtcEngine: client,
           rtmConfig: { rtmEngine: rtmClient },
           renderMode: TranscriptHelperMode.TEXT,
-          enableLog: true,
+          // Verbose SDK transcript logging is useful for diagnostics but adds
+          // avoidable console work on every live update in the child-facing UI.
+          enableLog: showDebug || showLatencyDebug,
         });
 
         if (cancelled) {
@@ -282,15 +300,67 @@ export default function ConversationComponent({
         }
 
         ai.on(AgoraVoiceAIEvents.TRANSCRIPT_UPDATED, (t) => {
+          const receivedAt = Date.now();
           setRawTranscript([...t]);
+          const incoming = toolkitTranscriptToStreamEvents(t, {
+            conversationId: agoraData.channel,
+            entityId: character?.id,
+            sceneId: scene,
+            countryId: scene === 'globe' ? character?.id : undefined,
+          });
+          const changedEvents = incoming.filter((event) => {
+            if (finalizedTranscriptIdsRef.current.has(event.messageId)) {
+              return false;
+            }
+            const signature = `${event.final}:${event.text}`;
+            if (transcriptObservationRef.current.get(event.messageId) === signature) {
+              return false;
+            }
+            transcriptObservationRef.current.set(event.messageId, signature);
+            if (event.final) {
+              finalizedTranscriptIdsRef.current.add(event.messageId);
+            }
+            return true;
+          });
+          setTranscriptEvents((current) =>
+            mergeTranscriptStreamEvents(current, incoming, agoraData.channel),
+          );
+          setLatencyTimings((current) => {
+            const next = { ...current };
+            for (const event of changedEvents) {
+              if (event.speaker === 'user') {
+                if (!event.final && !next.firstAsrPartialAt) {
+                  next.firstAsrPartialAt = receivedAt;
+                }
+                if (event.final) next.finalAsrAt = receivedAt;
+              } else {
+                if (!next.firstAgentTextAt) next.firstAgentTextAt = receivedAt;
+                if (event.final) next.agentTextCompletedAt = receivedAt;
+              }
+            }
+            return next;
+          });
         });
         // Agent state drives the visualizer, independent of RTC audio presence.
         ai.on(AgoraVoiceAIEvents.AGENT_STATE_CHANGED, (agentUserId, event) => {
           rememberAgentUserId(agentUserId);
           setAgentState(event.state);
+          const observedAt = normalizeTimestampMs(event.timestamp || Date.now());
+          setLatencyTimings((current) => {
+            if (event.state === 'listening') {
+              return { speechStartedAt: observedAt };
+            }
+            if (event.state === 'thinking') {
+              return { ...current, speechEndedAt: observedAt };
+            }
+            if (event.state === 'speaking') {
+              return { ...current, audioPlaybackStartedAt: observedAt };
+            }
+            return current;
+          });
         });
         ai.on(AgoraVoiceAIEvents.AGENT_METRICS, (_, metrics) => {
-          setAgentMetrics((prev) => [...prev, metrics].slice(-8));
+          setAgentMetrics((prev) => [...prev, metrics].slice(-24));
         });
         ai.on(AgoraVoiceAIEvents.MESSAGE_ERROR, (agentUserId, error) => {
           rememberAgentUserId(agentUserId);
@@ -552,6 +622,11 @@ export default function ConversationComponent({
   );
 
   const latestCaption = useMemo(() => {
+    const latestAgentEvent = [...transcriptEvents]
+      .reverse()
+      .find((event) => event.speaker === 'agent');
+    if (latestAgentEvent?.text) return latestAgentEvent.text;
+
     const inProgressText =
       currentInProgressMessage &&
       String(currentInProgressMessage.uid) === agentUID &&
@@ -562,7 +637,12 @@ export default function ConversationComponent({
       .reverse()
       .find((message) => String(message.uid) === agentUID && message.text?.trim());
     return latestAgentMessage?.text?.trim() || character?.voiceIntro || '';
-  }, [agentUID, character?.voiceIntro, currentInProgressMessage, messageList]);
+  }, [agentUID, character?.voiceIntro, currentInProgressMessage, messageList, transcriptEvents]);
+
+  const latestUserTranscript = useMemo(
+    () => [...transcriptEvents].reverse().find((event) => event.speaker === 'user'),
+    [transcriptEvents],
+  );
 
   const suggestedQuestions = useMemo(
     () => pickSuggestedQuestions(character?.starterQuestions ?? []),
@@ -658,7 +738,21 @@ export default function ConversationComponent({
               </div>
             ) : null}
 
-            <div className={`flex flex-col gap-4 lg:gap-5 ${hasImage ? '' : 'items-center'}`}>
+            <div
+              className={`flex flex-col gap-4 lg:gap-5 ${hasImage ? '' : 'items-center'}`}
+            >
+              {latestUserTranscript ? (
+                <div
+                  className={`animate-fade-up self-center rounded-[22px] bg-[#fff7ef] px-5 py-3 text-left shadow-[0_12px_24px_rgba(83,58,27,0.1)] ${hasImage ? 'max-w-[28rem] lg:self-start' : 'w-full max-w-[40rem]'}`}
+                >
+                  <p className="text-xs font-black uppercase tracking-[0.14em] text-[#7f8f54]">
+                    You{latestUserTranscript.final ? '' : ' ...'}
+                  </p>
+                  <p className="mt-1 text-base font-semibold leading-6 text-slate-800 sm:text-lg">
+                    {latestUserTranscript.text}
+                  </p>
+                </div>
+              ) : null}
               <div className={`animate-fade-up relative self-center rounded-[30px] bg-white px-6 py-5 text-left shadow-[0_18px_34px_rgba(91,71,41,0.12)] ${hasImage ? 'max-w-[28rem] lg:self-start' : 'w-full max-w-[40rem]'}`}>
                 <div className="absolute left-[-10px] top-[56%] h-6 w-6 -translate-y-1/2 rotate-45 rounded-[6px] bg-white" />
                 <p className="text-lg font-semibold leading-8 text-slate-800 sm:text-[1.5rem] sm:leading-[2.15rem]">
@@ -766,6 +860,15 @@ export default function ConversationComponent({
                 </div>
               </div>
             </details>
+          ) : null}
+
+          {showLatencyDebug ? (
+            <LatencyDebugPanel
+              events={transcriptEvents}
+              metrics={agentMetrics}
+              agentState={agentState}
+              timings={latencyTimings}
+            />
           ) : null}
 
           {remoteUsers.map((user) => (
