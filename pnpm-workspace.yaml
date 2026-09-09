@@ -2,3 +2,5 @@ allowBuilds:
   esbuild: true
   sharp: true
   unrs-resolver: true
+patchedDependencies:
+  agora-rtm@2.3.0: patches/agora-rtm@2.3.0.patch

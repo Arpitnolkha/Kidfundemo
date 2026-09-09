@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  agora-rtm@2.3.0: 3016cfa452f1910545704a50f7d2eebdc620bb92e4f59303facbb71c6d11f532
+
 importers:
 
   .:
@@ -25,25 +28,25 @@ importers:
         version: 1.2.4(@types/react@19.2.14)(react@19.2.4)
       agora-agent-client-toolkit:
         specifier: 1.2.0
-        version: 1.2.0(agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0)))(agora-rtm@2.2.3(agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0))))(debug@4.4.3(supports-color@7.2.0))
+        version: 1.2.0(agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(agora-rtm@2.3.0(patch_hash=3016cfa452f1910545704a50f7d2eebdc620bb92e4f59303facbb71c6d11f532)(agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)))(debug@4.4.3(supports-color@7.2.0))
       agora-agent-uikit:
         specifier: 1.1.0
-        version: 1.1.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(agora-agent-client-toolkit-react@1.2.0(agora-agent-client-toolkit@1.2.0(agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0)))(agora-rtm@2.2.3(agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0))))(debug@4.4.3(supports-color@7.2.0)))(agora-rtc-react@2.5.1(react@19.2.4))(react@19.2.4))(agora-agent-client-toolkit@1.2.0(agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0)))(agora-rtm@2.2.3(agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0))))(debug@4.4.3(supports-color@7.2.0)))(agora-rtc-react@2.5.1(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        version: 1.1.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(agora-agent-client-toolkit-react@1.2.0(agora-agent-client-toolkit@1.2.0(agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(agora-rtm@2.3.0(patch_hash=3016cfa452f1910545704a50f7d2eebdc620bb92e4f59303facbb71c6d11f532)(agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)))(debug@4.4.3(supports-color@7.2.0)))(agora-rtc-react@2.5.1(react@19.2.4))(react@19.2.4))(agora-agent-client-toolkit@1.2.0(agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(agora-rtm@2.3.0(patch_hash=3016cfa452f1910545704a50f7d2eebdc620bb92e4f59303facbb71c6d11f532)(agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)))(debug@4.4.3(supports-color@7.2.0)))(agora-rtc-react@2.5.1(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       agora-agents:
-        specifier: ^2.3.1
-        version: 2.3.1
+        specifier: ^2.7.0
+        version: 2.7.0
       agora-rtc-react:
         specifier: ^2.5.1
         version: 2.5.1(react@19.2.4)
       agora-rtc-sdk-ng:
-        specifier: ^4.24.3
-        version: 4.24.3(debug@4.4.3(supports-color@7.2.0))
+        specifier: ^4.24.8
+        version: 4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
       agora-rtm:
-        specifier: ^2.2.3
-        version: 2.2.3(agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0)))
+        specifier: ^2.3.0
+        version: 2.3.0(patch_hash=3016cfa452f1910545704a50f7d2eebdc620bb92e4f59303facbb71c6d11f532)(agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))
       agora-token:
-        specifier: ^2.0.5
-        version: 2.0.5
+        specifier: ^2.0.6
+        version: 2.0.6
       ai:
         specifier: ^6.0.107
         version: 6.0.137(zod@4.4.3)
@@ -132,17 +135,23 @@ packages:
   '@adobe/css-tools@4.5.0':
     resolution: {integrity: sha512-6OzddxPio9UiWTCemp4N8cYLV2ZN1ncRnV1cVGtve7dhPOtRkleRyx32GQCYSwDYgaHU3USMm84tNsvKzRCa1Q==}
 
-  '@agora-js/media@4.24.3':
-    resolution: {integrity: sha512-aC471uaWWGSXnruoaJggi9Ltbp3ldYxMyIi61jOew960zVsHaw78YhTDVv27XX1NvPRqEPLyfyMGEX4av0xOKA==}
+  '@agora-js/media@4.24.8':
+    resolution: {integrity: sha512-ULG18xmKeTA2P462lB+rBx46QK0bffj59e/MciCCivqVcn1ZEntFOUEnmkAOv8FzIn5wISC8tr02PZwUbinQVw==}
 
-  '@agora-js/protocol@4.24.3':
-    resolution: {integrity: sha512-GWAV+J9wv53u5T/k4KAjsxQ9Y+n73bWc3dSBe7OHjWcSZQikcWRJoOtygQiZKWmpYV/ZW5LQ0R12jHI7GAG0cQ==}
+  '@agora-js/protocol@4.24.8':
+    resolution: {integrity: sha512-DDAJnLPY2JUP1YSyFp+Lcyn3FMM6aK/vCH9jk+O6yH/r4+WmruGijqtpUk3bf4iX3Fn8EU4F92woZOIDjjgQaA==}
 
   '@agora-js/report@4.24.3':
     resolution: {integrity: sha512-A2Q13JbRlSYkEF0W6eMCJmnzmHSBzaWZORNnsS23GElwACSxoa2KTMcDp0MQhlsI9Ht6277ZuVSCdkT48A6Pwg==}
 
+  '@agora-js/report@4.24.8':
+    resolution: {integrity: sha512-i4KW+Q632yDIHbRIHNK5w1AZhMUmV6Vh0bL6WxdQQdi7Pmcx2+w4k08W95li8Dcfodl6/ypRD0MbrkYqmEpcRg==}
+
   '@agora-js/shared@4.24.3':
     resolution: {integrity: sha512-PyKelGEuV/g4fTjDjANpBqPZMaY0NFdd0W4UcGtJ2rayVU+YAeztLvu4tpDbm14U4BG5dmz/N+VHckxFPgoIjQ==}
+
+  '@agora-js/shared@4.24.8':
+    resolution: {integrity: sha512-N5y8ZD3Rm6mPJT6obuuNYx5xwtjuU1hNIEyHgTrxfAhbfrK41XnH5aLFAaaHQOEJsQwsVRFrHTfEmMb36srkQA==}
 
   '@ai-sdk/gateway@3.0.79':
     resolution: {integrity: sha512-Wk2QJpqd0em5YcR49uoMCy9msyANAYgjXdlRcqqRt2fz4rNLnMMrKOlLwAXoFzR1ElR3bj4e/k6hscRfjpzSGA==}
@@ -250,8 +259,8 @@ packages:
     resolution: {integrity: sha512-LwdZHpScM4Qz8Xw2iKSzS+cfglZzJGvofQICy7W7v4caru4EaAmyUuO6BGrbyQ2mYV11W0U8j5mBhd14dd3B0A==}
     engines: {node: '>=6.9.0'}
 
-  '@bufbuild/protobuf@2.11.0':
-    resolution: {integrity: sha512-sBXGT13cpmPR5BMgHE6UEEfEaShh5Ror6rfN3yEK5si7QVrtZg8LEPQb0VVhiLRUslD2yLnXtnRzG035J/mZXQ==}
+  '@bufbuild/protobuf@2.10.1':
+    resolution: {integrity: sha512-ckS3+vyJb5qGpEYv/s1OebUHDi/xSNtfgw1wqKZo7MR9F2z+qXr0q5XagafAG/9O0QPVIUfST0smluYSTpYFkg==}
 
   '@csstools/color-helpers@5.1.0':
     resolution: {integrity: sha512-S11EXWJyy0Mz5SYvRmY8nJYTFFd1LCNV+7cXyAgQtOOuzb4EsgfqDufL+9esx72/eLhsRdGZwaldu/h+E4t4BA==}
@@ -1688,6 +1697,10 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
 
+  agent-base@6.0.2:
+    resolution: {integrity: sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ==}
+    engines: {node: '>= 6.0.0'}
+
   agent-base@7.1.4:
     resolution: {integrity: sha512-MnA+YT8fwfJPgBx3m60MNqakm30XOkyIoH1y6huTQvC0PwZG7ki8NacLBcrPbNoo8vEZy7Jpuk7+jMO+CUovTQ==}
     engines: {node: '>= 14'}
@@ -1730,8 +1743,8 @@ packages:
       agora-rtm-sdk:
         optional: true
 
-  agora-agents@2.3.1:
-    resolution: {integrity: sha512-Wh235kF6PlW/74YnAcdzqq95PCQZXhlSMFh8aoUbRsCYURLSM5VHdhJfkjAGRbklYe5E460+jRRQEUU8Qdjsvg==}
+  agora-agents@2.7.0:
+    resolution: {integrity: sha512-yNuWqnNHc7UiY91S5nMhjdxN7DDIWG08jiLRu/dJuIWZ0/W+WfBeW70BsSOQxBTlQqaI7DaNHmaN2xUOyKK7JQ==}
     engines: {node: '>=18.0.0'}
 
   agora-rtc-react@2.5.1:
@@ -1740,19 +1753,25 @@ packages:
     peerDependencies:
       react: '>=16.8'
 
-  agora-rtc-sdk-ng@4.24.3:
-    resolution: {integrity: sha512-DEz0+/jgsajZgWFG/uHijoMeheqr7YWUJ5AyubiqKt5vC1TF0/3v51vVl2aqupY+YkmJOg0q64B4AJcdpj/TBQ==}
+  agora-rtc-sdk-ng@4.24.8:
+    resolution: {integrity: sha512-TkHDu1HxYcjfbvpmOfOAucSgMJRlphODQlVN6fwAMCh7yIKt6J4O3wITNCvUkEVi9aaZTjeJOZ+onFUu/zlnuw==}
+
+  agora-rte-extension-ng@1.0.3:
+    resolution: {integrity: sha512-Gkh60IomlIrhq7ljDIy4zHgKEhfNx3c0Kto27wKCQp2wCabmHz9ucHT/7u9telUCA6YcNjnFMhenjdJx1JZeEA==}
 
   agora-rte-extension@1.2.4:
     resolution: {integrity: sha512-0ovZz1lbe30QraG1cU+ji7EnQ8aUu+Hf3F+a8xPml3wPOyUQEK6CTdxV9kMecr9t+fIDrGeW7wgJTsM1DQE7Nw==}
 
-  agora-rtm@2.2.3:
-    resolution: {integrity: sha512-5O6uINrtnNDXijZEAmTwLzC1J6GizQoRb4moRx+DsVeYjcEbMjZAFcSnZVYHsjq3LrWetdknMhGt2o0zZJEBtQ==}
+  agora-rtm@2.3.0:
+    resolution: {integrity: sha512-eistl/thwgyCCqtMg11pOAXnNkrEG3c+Zcl2o+Kry/dP3+4U2Qx/YpQwSkE+LtWP5jk7S6m8BeNJpGsjOf+VCQ==}
     peerDependencies:
-      agora-rtc-sdk-ng: 4.23.0
+      agora-rtc-sdk-ng: ^4.24.3
 
   agora-token@2.0.5:
     resolution: {integrity: sha512-0NcbzC3iuutlksv3b4bCMKHrW3pko6gdiGEMRo6APDice24kfXAuWyAlG9hRBrrPBVDShwm9/GUz2Scd3zuZQw==}
+
+  agora-token@2.0.6:
+    resolution: {integrity: sha512-IndnG81dFxdTEj9G14FykEEilxrjPo92crGwB8ip5K/pwKNrd1pI98HZppCNNnHPhIwmAWiLmjmdBpgGB4UqKA==}
 
   ai@6.0.137:
     resolution: {integrity: sha512-9e/mNMTmXmMkmldEJPIumy9FFBuUWHUyj2yF8EglC3VVOhVVBwlnpeHYSFKdNc13Jj6Hso3EJcZioMaofgCs4A==}
@@ -1862,6 +1881,9 @@ packages:
 
   axios@1.13.6:
     resolution: {integrity: sha512-ChTCHMouEe2kn713WHbQGcuYrr6fXTBiu460OTwWrWob16g1bXn4vtz07Ope7ewMozJAnEquLk5lWQWtBig9DQ==}
+
+  axios@1.20.0:
+    resolution: {integrity: sha512-r8aOh8j9cGKpgQAqpzrUHnSIc6a59Y3Xf/cv8sy1DrHCkZHzQGEuoq1tARk6qSyDdtQGSDgpb9kFlruzPvrgwg==}
 
   axobject-query@4.1.0:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
@@ -2545,6 +2567,15 @@ packages:
       debug:
         optional: true
 
+  follow-redirects@1.16.0:
+    resolution: {integrity: sha512-y5rN/uOsadFT/JfYwhxRS5R7Qce+g3zG97+JrtFZlC9klX/W5hD7iiLzScI4nZqUS7DNUdhPgw4xI8W2LuXlUw==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+
   fontkit@2.0.4:
     resolution: {integrity: sha512-syetQadaUEDNdxdugga9CpEYVaQIxOwk7GlwZWWZ19//qW4zE5bknOKeMBDYAASwnpaSHKJITRLMF9m1fp3s6g==}
 
@@ -2554,6 +2585,10 @@ packages:
 
   form-data@4.0.5:
     resolution: {integrity: sha512-8RipRLol37bNs2bhoV67fiTEvdTrbMUYcFTiy3+wuuOnUog2QBHCZWXDRijWQfAkhBj2Uf5UnVaiWwA5vdd82w==}
+    engines: {node: '>= 6'}
+
+  form-data@4.0.6:
+    resolution: {integrity: sha512-vKatAh4SlVfgbv+YtmhiRjhEMJsYpsG1Y2rMQtR+SVSbytsSD1YGzDIcrAJmdFec88u/+VoGmxnl+80gL1tRCQ==}
     engines: {node: '>= 6'}
 
   formdata-polyfill@4.0.10:
@@ -2661,6 +2696,10 @@ packages:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
 
+  hasown@2.0.4:
+    resolution: {integrity: sha512-T2UbfbBEF32wiepXIsMlTW9+dDYC6wMh/t/vYA4tuOMKqWz/n3vr1NFSxQiyP+zk2mXsoMA/i/7qV6LKut1t1A==}
+    engines: {node: '>= 0.4'}
+
   hermes-estree@0.25.1:
     resolution: {integrity: sha512-0wUoCcLp+5Ev5pDW2OriHC2MJCbwLwuRx+gAqMTOkGKJJiBCLjtrvy4PWUGn6MIVefecRpzoOZ/UV6iGdOr+Cw==}
 
@@ -2674,6 +2713,10 @@ packages:
   http-proxy-agent@7.0.2:
     resolution: {integrity: sha512-T1gkAiYYDWYx3V5Bmyu7HcfcvL7mUrTWiM6yOfa3PIphViJ/gFPbvidQ+veqSOHci/PxBcDabeUNCzpOODJZig==}
     engines: {node: '>= 14'}
+
+  https-proxy-agent@5.0.1:
+    resolution: {integrity: sha512-dFcAjpTQFgoLMzC2VwU+C/CbS7uRL0lWmxDITmqm7C+7F0Odmj6s9l6alZc6AELXhrnggM2CeWSXHGOdX2YtwA==}
+    engines: {node: '>= 6'}
 
   https-proxy-agent@7.0.6:
     resolution: {integrity: sha512-vK9P5/iUfdl95AI+JVyUuIcVtd4ofvtrOr3HNtM2yxC9bnMbEdp3x01OhQNnjb8IJYi38VlTE3mBXwcfvywuSw==}
@@ -3262,6 +3305,10 @@ packages:
 
   proxy-from-env@1.1.0:
     resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
+
+  proxy-from-env@2.1.0:
+    resolution: {integrity: sha512-cJ+oHTW1VAEa8cJslgmUZrc+sjRKgAKl3Zyse6+PV38hZe/V6Z14TbCuXcan9F9ghlz4QrFr2c92TNF82UkYHA==}
+    engines: {node: '>=10'}
 
   punycode@2.3.1:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
@@ -3930,26 +3977,29 @@ snapshots:
 
   '@adobe/css-tools@4.5.0': {}
 
-  '@agora-js/media@4.24.3(debug@4.4.3(supports-color@7.2.0))':
+  '@agora-js/media@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
     dependencies:
-      '@agora-js/report': 4.24.3(debug@4.4.3(supports-color@7.2.0))
-      '@agora-js/shared': 4.24.3(debug@4.4.3(supports-color@7.2.0))
+      '@agora-js/report': 4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+      '@agora-js/shared': 4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
       agora-rte-extension: 1.2.4
-      axios: 1.13.6(debug@4.4.3(supports-color@7.2.0))
+      agora-rte-extension-ng: 1.0.3
+      axios: 1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
       webrtc-adapter: 8.2.0
     transitivePeerDependencies:
       - debug
+      - supports-color
 
-  '@agora-js/protocol@4.24.3(debug@4.4.3(supports-color@7.2.0))':
+  '@agora-js/protocol@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
     dependencies:
-      '@agora-js/media': 4.24.3(debug@4.4.3(supports-color@7.2.0))
-      '@agora-js/report': 4.24.3(debug@4.4.3(supports-color@7.2.0))
-      '@agora-js/shared': 4.24.3(debug@4.4.3(supports-color@7.2.0))
-      '@bufbuild/protobuf': 2.11.0
+      '@agora-js/media': 4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+      '@agora-js/report': 4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+      '@agora-js/shared': 4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+      '@bufbuild/protobuf': 2.10.1
       '@types/pako': 2.0.4
       pako: 2.1.0
     transitivePeerDependencies:
       - debug
+      - supports-color
 
   '@agora-js/report@4.24.3(debug@4.4.3(supports-color@7.2.0))':
     dependencies:
@@ -3957,6 +4007,15 @@ snapshots:
       axios: 1.13.6(debug@4.4.3(supports-color@7.2.0))
     transitivePeerDependencies:
       - debug
+    optional: true
+
+  '@agora-js/report@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
+    dependencies:
+      '@agora-js/shared': 4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+      axios: 1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+    transitivePeerDependencies:
+      - debug
+      - supports-color
 
   '@agora-js/shared@4.24.3(debug@4.4.3(supports-color@7.2.0))':
     dependencies:
@@ -3964,6 +4023,15 @@ snapshots:
       ua-parser-js: 0.7.41
     transitivePeerDependencies:
       - debug
+    optional: true
+
+  '@agora-js/shared@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
+    dependencies:
+      axios: 1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+      ua-parser-js: 0.7.41
+    transitivePeerDependencies:
+      - debug
+      - supports-color
 
   '@ai-sdk/gateway@3.0.79(zod@4.4.3)':
     dependencies:
@@ -4133,7 +4201,7 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
 
-  '@bufbuild/protobuf@2.11.0': {}
+  '@bufbuild/protobuf@2.10.1': {}
 
   '@csstools/color-helpers@5.1.0': {}
 
@@ -5358,26 +5426,32 @@ snapshots:
 
   acorn@8.16.0: {}
 
+  agent-base@6.0.2(supports-color@7.2.0):
+    dependencies:
+      debug: 4.4.3(supports-color@7.2.0)
+    transitivePeerDependencies:
+      - supports-color
+
   agent-base@7.1.4: {}
 
-  agora-agent-client-toolkit-react@1.2.0(agora-agent-client-toolkit@1.2.0(agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0)))(agora-rtm@2.2.3(agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0))))(debug@4.4.3(supports-color@7.2.0)))(agora-rtc-react@2.5.1(react@19.2.4))(react@19.2.4):
+  agora-agent-client-toolkit-react@1.2.0(agora-agent-client-toolkit@1.2.0(agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(agora-rtm@2.3.0(patch_hash=3016cfa452f1910545704a50f7d2eebdc620bb92e4f59303facbb71c6d11f532)(agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)))(debug@4.4.3(supports-color@7.2.0)))(agora-rtc-react@2.5.1(react@19.2.4))(react@19.2.4):
     dependencies:
-      agora-agent-client-toolkit: 1.2.0(agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0)))(agora-rtm@2.2.3(agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0))))(debug@4.4.3(supports-color@7.2.0))
+      agora-agent-client-toolkit: 1.2.0(agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(agora-rtm@2.3.0(patch_hash=3016cfa452f1910545704a50f7d2eebdc620bb92e4f59303facbb71c6d11f532)(agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)))(debug@4.4.3(supports-color@7.2.0))
       agora-rtc-react: 2.5.1(react@19.2.4)
       react: 19.2.4
     optional: true
 
-  agora-agent-client-toolkit@1.2.0(agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0)))(agora-rtm@2.2.3(agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0))))(debug@4.4.3(supports-color@7.2.0)):
+  agora-agent-client-toolkit@1.2.0(agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(agora-rtm@2.3.0(patch_hash=3016cfa452f1910545704a50f7d2eebdc620bb92e4f59303facbb71c6d11f532)(agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)))(debug@4.4.3(supports-color@7.2.0)):
     dependencies:
-      agora-rtc-sdk-ng: 4.24.3(debug@4.4.3(supports-color@7.2.0))
+      agora-rtc-sdk-ng: 4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
     optionalDependencies:
       '@agora-js/report': 4.24.3(debug@4.4.3(supports-color@7.2.0))
-      agora-rtm: 2.2.3(agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0)))
+      agora-rtm: 2.3.0(patch_hash=3016cfa452f1910545704a50f7d2eebdc620bb92e4f59303facbb71c6d11f532)(agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))
       jszip: 3.10.1
     transitivePeerDependencies:
       - debug
 
-  agora-agent-uikit@1.1.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(agora-agent-client-toolkit-react@1.2.0(agora-agent-client-toolkit@1.2.0(agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0)))(agora-rtm@2.2.3(agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0))))(debug@4.4.3(supports-color@7.2.0)))(agora-rtc-react@2.5.1(react@19.2.4))(react@19.2.4))(agora-agent-client-toolkit@1.2.0(agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0)))(agora-rtm@2.2.3(agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0))))(debug@4.4.3(supports-color@7.2.0)))(agora-rtc-react@2.5.1(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
+  agora-agent-uikit@1.1.0(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(agora-agent-client-toolkit-react@1.2.0(agora-agent-client-toolkit@1.2.0(agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(agora-rtm@2.3.0(patch_hash=3016cfa452f1910545704a50f7d2eebdc620bb92e4f59303facbb71c6d11f532)(agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)))(debug@4.4.3(supports-color@7.2.0)))(agora-rtc-react@2.5.1(react@19.2.4))(react@19.2.4))(agora-agent-client-toolkit@1.2.0(agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(agora-rtm@2.3.0(patch_hash=3016cfa452f1910545704a50f7d2eebdc620bb92e4f59303facbb71c6d11f532)(agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)))(debug@4.4.3(supports-color@7.2.0)))(agora-rtc-react@2.5.1(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
     dependencies:
       '@lottiefiles/dotlottie-react': 0.17.15(react@19.2.4)
       '@radix-ui/react-dialog': 1.1.15(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -5395,14 +5469,14 @@ snapshots:
       react-dom: 19.2.4(react@19.2.4)
       tailwind-merge: 3.5.0
     optionalDependencies:
-      agora-agent-client-toolkit: 1.2.0(agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0)))(agora-rtm@2.2.3(agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0))))(debug@4.4.3(supports-color@7.2.0))
-      agora-agent-client-toolkit-react: 1.2.0(agora-agent-client-toolkit@1.2.0(agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0)))(agora-rtm@2.2.3(agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0))))(debug@4.4.3(supports-color@7.2.0)))(agora-rtc-react@2.5.1(react@19.2.4))(react@19.2.4)
+      agora-agent-client-toolkit: 1.2.0(agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(agora-rtm@2.3.0(patch_hash=3016cfa452f1910545704a50f7d2eebdc620bb92e4f59303facbb71c6d11f532)(agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)))(debug@4.4.3(supports-color@7.2.0))
+      agora-agent-client-toolkit-react: 1.2.0(agora-agent-client-toolkit@1.2.0(agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(agora-rtm@2.3.0(patch_hash=3016cfa452f1910545704a50f7d2eebdc620bb92e4f59303facbb71c6d11f532)(agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)))(debug@4.4.3(supports-color@7.2.0)))(agora-rtc-react@2.5.1(react@19.2.4))(react@19.2.4)
       agora-rtc-react: 2.5.1(react@19.2.4)
     transitivePeerDependencies:
       - '@types/react'
       - '@types/react-dom'
 
-  agora-agents@2.3.1:
+  agora-agents@2.7.0:
     dependencies:
       agora-token: 2.0.5
 
@@ -5410,28 +5484,38 @@ snapshots:
     dependencies:
       react: 19.2.4
 
-  agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0)):
+  agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0):
     dependencies:
-      '@agora-js/media': 4.24.3(debug@4.4.3(supports-color@7.2.0))
-      '@agora-js/protocol': 4.24.3(debug@4.4.3(supports-color@7.2.0))
-      '@agora-js/report': 4.24.3(debug@4.4.3(supports-color@7.2.0))
-      '@agora-js/shared': 4.24.3(debug@4.4.3(supports-color@7.2.0))
+      '@agora-js/media': 4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+      '@agora-js/protocol': 4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+      '@agora-js/report': 4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+      '@agora-js/shared': 4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
       agora-rte-extension: 1.2.4
-      axios: 1.13.6(debug@4.4.3(supports-color@7.2.0))
+      agora-rte-extension-ng: 1.0.3
+      axios: 1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
       formdata-polyfill: 4.0.10
       pako: 2.1.0
       ua-parser-js: 0.7.41
       webrtc-adapter: 8.2.0
     transitivePeerDependencies:
       - debug
+      - supports-color
+
+  agora-rte-extension-ng@1.0.3: {}
 
   agora-rte-extension@1.2.4: {}
 
-  agora-rtm@2.2.3(agora-rtc-sdk-ng@4.24.3(debug@4.4.3(supports-color@7.2.0))):
+  agora-rtm@2.3.0(patch_hash=3016cfa452f1910545704a50f7d2eebdc620bb92e4f59303facbb71c6d11f532)(agora-rtc-sdk-ng@4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)):
     dependencies:
-      agora-rtc-sdk-ng: 4.24.3(debug@4.4.3(supports-color@7.2.0))
+      agora-rtc-sdk-ng: 4.24.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
 
   agora-token@2.0.5:
+    dependencies:
+      crc-32: 1.2.2
+      cuint: 0.2.2
+      md5: 2.3.0
+
+  agora-token@2.0.6:
     dependencies:
       crc-32: 1.2.2
       cuint: 0.2.2
@@ -5578,6 +5662,17 @@ snapshots:
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
+    optional: true
+
+  axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0):
+    dependencies:
+      follow-redirects: 1.16.0(debug@4.4.3(supports-color@7.2.0))
+      form-data: 4.0.6
+      https-proxy-agent: 5.0.1(supports-color@7.2.0)
+      proxy-from-env: 2.1.0
+    transitivePeerDependencies:
+      - debug
+      - supports-color
 
   axobject-query@4.1.0: {}
 
@@ -6439,6 +6534,11 @@ snapshots:
   follow-redirects@1.15.11(debug@4.4.3(supports-color@7.2.0)):
     optionalDependencies:
       debug: 4.4.3(supports-color@7.2.0)
+    optional: true
+
+  follow-redirects@1.16.0(debug@4.4.3(supports-color@7.2.0)):
+    optionalDependencies:
+      debug: 4.4.3(supports-color@7.2.0)
 
   fontkit@2.0.4:
     dependencies:
@@ -6462,6 +6562,15 @@ snapshots:
       combined-stream: 1.0.8
       es-set-tostringtag: 2.1.0
       hasown: 2.0.2
+      mime-types: 2.1.35
+    optional: true
+
+  form-data@4.0.6:
+    dependencies:
+      asynckit: 0.4.0
+      combined-stream: 1.0.8
+      es-set-tostringtag: 2.1.0
+      hasown: 2.0.4
       mime-types: 2.1.35
 
   formdata-polyfill@4.0.10:
@@ -6564,6 +6673,10 @@ snapshots:
     dependencies:
       function-bind: 1.1.2
 
+  hasown@2.0.4:
+    dependencies:
+      function-bind: 1.1.2
+
   hermes-estree@0.25.1: {}
 
   hermes-parser@0.25.1:
@@ -6577,6 +6690,13 @@ snapshots:
   http-proxy-agent@7.0.2(supports-color@7.2.0):
     dependencies:
       agent-base: 7.1.4
+      debug: 4.4.3(supports-color@7.2.0)
+    transitivePeerDependencies:
+      - supports-color
+
+  https-proxy-agent@5.0.1(supports-color@7.2.0):
+    dependencies:
+      agent-base: 6.0.2(supports-color@7.2.0)
       debug: 4.4.3(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
@@ -7169,7 +7289,10 @@ snapshots:
       object-assign: 4.1.1
       react-is: 16.13.1
 
-  proxy-from-env@1.1.0: {}
+  proxy-from-env@1.1.0:
+    optional: true
+
+  proxy-from-env@2.1.0: {}
 
   punycode@2.3.1: {}
 

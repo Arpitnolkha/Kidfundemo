@@ -101,6 +101,12 @@ const { localMicrophoneTrack } = useLocalMicrophoneTrack(isReady);
 
 ### AgoraVoiceAI Init
 
+Storybook RTM startup owns a resource object per effect run. Check cancellation
+after async startup steps and clean up partially initialized clients in `finally`.
+Teardown must be idempotent and must not clear a replacement session's state.
+The pnpm RTM 2.3.0 patch demotes only the cumulative instance-count notice to
+INFO; retain other SDK errors and reassess the patch when upgrading RTM.
+
 Initialize `AgoraVoiceAI` from `agora-agent-client-toolkit` inside `ConversationComponent`, gated on `isReady && joinSuccess`.
 
 ```tsx

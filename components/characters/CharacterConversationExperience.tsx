@@ -50,6 +50,7 @@ const AgoraProvider = dynamic(
 type LiveSessionResources = {
   agentId?: string;
   rtmClient?: RTMClient | null;
+  stopPromise?: Promise<void>;
 };
 
 const isLiveVoiceEnabled =
@@ -270,40 +271,39 @@ export function CharacterConversationExperience({
     [scene, character.id, discoveries],
   );
 
-  const stopLiveSession = useCallback(async (resources?: LiveSessionResources) => {
+  const stopLiveSession = useCallback((resources?: LiveSessionResources) => {
     const activeResources = resources ?? sessionRef.current;
-
-    if (activeResources.agentId) {
-      try {
-        await fetch('/api/agora/agent/stop', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ agentId: activeResources.agentId }),
-        });
-      } catch (stopError) {
-        console.error('Failed to stop Agora agent:', stopError);
-      }
-    }
-
-    if (activeResources.rtmClient) {
-      try {
-        await activeResources.rtmClient.logout();
-      } catch (logoutError) {
-        console.error('Failed to logout RTM client:', logoutError);
-      }
-    }
-
-    if (!resources || sessionRef.current === activeResources) {
+    // Detach only this session before asynchronous teardown can overlap a new one.
+    if (sessionRef.current === activeResources) {
       sessionRef.current = {};
       setAgoraData(null);
       setRtmClient(null);
     }
+    activeResources.stopPromise ??= (async () => {
+      if (activeResources.rtmClient) {
+        await activeResources.rtmClient.logout().catch((logoutError) => {
+          console.error('Failed to logout RTM client:', logoutError);
+        });
+      }
+      if (activeResources.agentId) {
+        await fetch('/api/agora/agent/stop', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ agentId: activeResources.agentId }),
+        }).catch((stopError) => {
+          console.error('Failed to stop Agora agent:', stopError);
+        });
+      }
+    })();
+    return activeResources.stopPromise;
   }, []);
 
   useEffect(() => {
     if (!isLiveVoiceEnabled) return;
 
     let cancelled = false;
+    let started = false;
+    const resources: LiveSessionResources = {};
 
     async function startLiveSession() {
       setIsLoading(true);
@@ -317,14 +317,19 @@ export function CharacterConversationExperience({
           throw new Error(tokenData.error ?? 'Failed to generate Agora token');
         }
 
+        if (cancelled) return;
         const { default: AgoraRTM } = await import('agora-rtm');
+        if (cancelled) return;
         const nextRtmClient: RTMClient = new AgoraRTM.RTM(
           process.env.NEXT_PUBLIC_AGORA_APP_ID!,
           tokenData.uid,
         );
 
+        resources.rtmClient = nextRtmClient;
         await nextRtmClient.login({ token: tokenData.token });
+        if (cancelled) return;
         await nextRtmClient.subscribe(tokenData.channel);
+        if (cancelled) return;
 
         const agentResponse = await fetch('/api/agora/agent/start', {
           method: 'POST',
@@ -340,21 +345,14 @@ export function CharacterConversationExperience({
         const agentData = await agentResponse.json();
 
         if (!agentResponse.ok) {
-          await nextRtmClient.logout().catch(() => undefined);
           throw new Error(agentData.error ?? 'Failed to start Agora agent');
         }
 
-        const nextSession = {
-          agentId: agentData.agentId,
-          rtmClient: nextRtmClient,
-        };
+        resources.agentId = agentData.agentId;
+        if (cancelled) return;
 
-        if (cancelled) {
-          await stopLiveSession(nextSession);
-          return;
-        }
-
-        sessionRef.current = nextSession;
+        started = true;
+        sessionRef.current = resources;
         setAgoraData({
           token: tokenData.token,
           uid: tokenData.uid,
@@ -371,6 +369,8 @@ export function CharacterConversationExperience({
           setError(message);
         }
       } finally {
+        // A cancelled/failed startup may already own a logged-in RTM client.
+        if (!started) await stopLiveSession(resources);
         if (!cancelled) {
           setIsLoading(false);
         }
@@ -381,7 +381,8 @@ export function CharacterConversationExperience({
 
     return () => {
       cancelled = true;
-      void stopLiveSession();
+      // In-flight startup releases its own resources in finally.
+      if (started) void stopLiveSession(resources);
     };
   }, [character.id, discoveries, scene, sessionKey, stopLiveSession]);
 

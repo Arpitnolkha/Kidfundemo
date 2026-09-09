@@ -48,6 +48,21 @@ flowchart LR
 - Vitest for unit tests
 - Playwright for smoke coverage
 
+Agora dependencies were checked against npm on 2026-09-09. The app uses
+`agora-agents` 2.7.0, `agora-rtc-sdk-ng` 4.24.8, `agora-rtm` 2.3.0, and
+`agora-token` 2.0.6. The current React RTC wrapper (2.5.1) and UI kit (1.1.0)
+are already the latest releases. Keep the client toolkit and its React wrapper
+on 1.2.0 while using this UI kit: its declared peer dependencies require
+`^1.2.0`, so toolkit 2.9.1 needs a coordinated UI-kit migration.
+
+RTM's `Ins id is N ... avoid mutual kick` diagnostic counts instances created
+over the page lifetime, not currently logged-in clients. Storybook session
+startup checks cancellation between asynchronous steps and releases partially
+initialized RTM clients on failure. Each session tears down only its own resources.
+The version-specific pnpm patch in `patches/agora-rtm@2.3.0.patch` changes only
+this constructor notice from ERROR to INFO (hidden at the default error log
+level). Other RTM errors remain enabled. Reassess this patch when upgrading RTM.
+
 ## Local Installation
 
 1. Use Node `24` in this repo:

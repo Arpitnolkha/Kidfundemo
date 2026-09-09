@@ -23,6 +23,10 @@
 
 ## Frontend Lifecycle Pitfalls
 
+- `pnpm-workspace.yaml` applies a version-specific RTM 2.3.0 patch that demotes only its cumulative constructor-count notice to INFO. Keep real RTM error logging enabled; reassess the patch on SDK upgrades.
+
+- RTM `Ins id is N ... avoid mutual kick` counts instances constructed over the page lifetime; it is not proof of simultaneous logins. Storybook startup checks cancellation between awaits and releases partially initialized clients. Cleanup owns one session's resources and cannot clear a newer session.
+
 - Initializing toolkit before `joinSuccess` often causes missing subscriptions.
 - Tying mic track creation directly to mute state can break visualizer audio graph.
 - Failing to teardown RTM client on session end leaks subscriptions and stale events.
