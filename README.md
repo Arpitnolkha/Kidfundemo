@@ -65,6 +65,9 @@ level). Other RTM errors remain enabled. Reassess this patch when upgrading RTM.
 
 ## Local Installation
 
+Use the `pnpm@11.21.0` version pinned in `package.json` locally and on Vercel.
+The lockfile's RTM patch metadata must be installed with the matching package manager.
+
 1. Use Node `24` in this repo:
 
    ```bash
@@ -76,7 +79,7 @@ level). Other RTM errors remain enabled. Reassess this patch when upgrading RTM.
 
    ```bash
    corepack enable
-   corepack prepare pnpm@latest --activate
+   corepack prepare pnpm@11.21.0 --activate
    ```
 
 3. Install dependencies:

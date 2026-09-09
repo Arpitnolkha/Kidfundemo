@@ -5,7 +5,7 @@
 ## Runtime Requirements
 
 - Node.js `>=22` (`package.json` engines field).
-- `pnpm` package manager.
+- `pnpm@11.21.0`, pinned in `package.json` so local and Vercel installs interpret the RTM patch metadata consistently.
 - Agora CLI (`agora`) for project binding and environment bootstrap.
 - Agora project with Conversational AI enabled.
 
